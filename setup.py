@@ -1,12 +1,21 @@
 from distutils.core import setup
 from distutils.extension import Extension
-from Cython.Distutils import build_ext
+try:
+    from Cython.Distutils import build_ext
+except:
+    # Buys us that first round we need to state a cython dependency
+    build_ext = None
 
 ext_modules=[
     Extension('dogfood',
         ["dogfood.pyx"]
         )
     ]
+
+requirements=[
+    'jsonlib',
+    'Cython'
+]
 
 setup(
     name="dogfood",
@@ -26,8 +35,6 @@ setup(
         "Operating System :: Unix",
     ],
     download_url="https://github.com/lysol/dogfood/tarball/master",
-    requires=(
-        'jsonlib',
-        'Cython'
-        )
+    requires=requirements,
+    install_requires=requirements,
     )
