@@ -1,3 +1,4 @@
+from __future__ import print_function
 from dogfood import *
 
 class Steak(Food):
@@ -9,11 +10,11 @@ class Steak(Food):
         self.degree = degree
 
 s = Steak('rare')
-print hasattr(s, '__food__')
+print(hasattr(s, '__food__'))
 
 sbytes = encode(s)
-#print sbytes
+#print(sbytes)
 new_steak = decode(sbytes)
-#print ns()
+#print(ns())
 
-print repr(new_steak)
+print(repr(new_steak))
