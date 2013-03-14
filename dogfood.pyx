@@ -43,19 +43,21 @@ def _deflate(thing):
 
     return thing
 
-def decode(encoded):
+def decode(encoded, class_source=None):
     obj = jsonlib.loads(encoded)
-    return _inflate(obj)
+    return _inflate(obj, class_source=class_source)
 
-def _is_food(oname):
-    return hasattr(globals()[oname], '__food__')
+def _is_food(oname, class_source=None):
+    class_source = class_source or globals()
+    return hasattr(class_source[oname], '__food__')
 
 def _can_be_food(alist):
     return type(alist) == list and len(alist) == 3 and alist[2] == '__food__'
 
-def _inflate(thing, parent=None):
-    if type(thing) == list and thing[-1] == '__food__':
-        if thing[0] in filter(_is_food, globals().keys()):
+def _inflate(thing, parent=None, class_source=None):
+    class_source = class_source or globals()
+    if isinstance(thing, list) and thing[-1] == '__food__':
+        if thing[0] in filter(lambda x: _is_food(x, class_source), class_source.keys()):
             # Inflate args too
             thing[1] = _inflate(thing[1], parent=thing)
             # kwargs
@@ -64,14 +66,16 @@ def _inflate(thing, parent=None):
             else:
                 kwargs = {}
             # deref the object and make a new one
-            exe = globals()[thing[0]]
+            exe = class_source[thing[0]]
             return exe(*thing[1], **kwargs)
+        else:
+            raise TypeError('%r not in globals' % thing[0])
 
-    elif type(thing) == list:
+    elif isinstance(thing, list):
         for nindex, item in enumerate(thing):
             thing[nindex] = _inflate(item, parent=thing)
         return thing
-    elif type(thing) == dict:
+    elif isinstance(thing, dict):
         for key, val in thing.iteritems():
             thing[key] = _inflate(val, parent=thing)
             thing[_inflate(key, parent=thing)] = thing[key]

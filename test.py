@@ -13,8 +13,10 @@ s = Steak('rare')
 print(hasattr(s, '__food__'))
 
 sbytes = encode(s)
-#print(sbytes)
-new_steak = decode(sbytes)
+print(sbytes)
+import jsonlib
+print(jsonlib.loads(sbytes))
+new_steak = decode(sbytes, globals())
 #print(ns())
 
 print(repr(new_steak))
