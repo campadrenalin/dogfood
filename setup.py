@@ -9,7 +9,7 @@ ext_modules=[
     ]
 
 jsonlib = "jsonlib"
-if sys.version[0] == 3:
+if sys.version[0] == '3':
     jsonlib = "jsonlib-python3"
 
 requirements=[
