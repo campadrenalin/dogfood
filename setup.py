@@ -1,4 +1,3 @@
-import sys
 from distutils.core import setup
 from distutils.extension import Extension
 
@@ -8,12 +7,7 @@ ext_modules=[
         )
     ]
 
-jsonlib = "jsonlib"
-if sys.version[0] == '3':
-    jsonlib = "jsonlib-python3 (>=1.6)"
-
 requirements=[
-    jsonlib,
 ]
 
 setup(

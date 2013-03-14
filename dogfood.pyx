@@ -1,17 +1,14 @@
-import jsonlib
+import json as jsonlib
 
-def _food_handler(obj, unknown=None):
+def _food_handler(obj):
     if hasattr(obj, '__food__'):
         item = obj.__encode__()
         item.append('__food__')
         return item
-    if unknown:
-        unknown(obj)
-    else:
-        raise jsonlib.UnknownSerializerError
+    raise TypeError("Unable to serialise: %r" % obj)
 
 def encode(thing):
-    bytes = jsonlib.write(thing, on_unknown=_food_handler)
+    bytes = jsonlib.dumps(thing, default=_food_handler)
     return bytes
 
 def _deflate(thing):
